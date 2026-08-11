@@ -4,7 +4,7 @@
 
 **Conservation carried by a unitary, dissipation carried by a measurement.**
 
-[![DOI](https://zenodo.org/badge/DOI/0.5281/zenodo.21894846.svg)](https://doi.org/0.5281/zenodo.21894846)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21894846.svg)](https://doi.org/10.5281/zenodo.21894846)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10%20|%203.11%20|%203.12-blue.svg)](https://www.python.org/downloads/)
 [![Framework: Qiskit](https://img.shields.io/badge/Framework-Qiskit-6929c4.svg)](https://www.ibm.com/quantum/qiskit)
@@ -19,9 +19,7 @@
 
 A port-Hamiltonian system separates what routes energy from what removes it:
 
-$$
-\dot{x} = \big(J(x) - R(x)\big)\nabla H(x) + G(x)u
-$$
+$$\dot{x} = \left(J(x) - R(x)\right)\nabla H(x) + G(x)u$$
 
 with $J = -J^{\top}$ skew and $R \succeq 0$ positive-semidefinite. The split is
 the content of the model: $J$ conserves, $R$ dissipates, and the power balance
@@ -31,29 +29,18 @@ rather than from a fitted constraint.
 This package realises both halves on a quantum circuit. The energy is a scaled
 Pauli expectation of a parameterised circuit,
 
-$$
-H_\theta(q, p) = s \cdot \langle ZZ \rangle(q, p; \theta) + b
-$$
+$$H_\theta(q, p) = s \cdot \langle ZZ \rangle(q, p; \theta) + b$$
 
 and the symplectic gradients come from the **parameter-shift rule** applied to
 the data-encoding gates, exactly and in two circuit evaluations each:
 
-$$
-\frac{\partial \langle O \rangle}{\partial \theta}
-= \tfrac{1}{2}\Big[\langle O \rangle\big(\theta + \tfrac{\pi}{2}\big)
-                 - \langle O \rangle\big(\theta - \tfrac{\pi}{2}\big)\Big]
-$$
+$$\frac{\partial \langle O \rangle}{\partial \theta} = \frac{1}{2}\left[\langle O \rangle\left(\theta + \frac{\pi}{2}\right) - \langle O \rangle\left(\theta - \frac{\pi}{2}\right)\right]$$
 
-One consequence is load-bearing and easy to miss. Taking $\dot q = +\partial
-H/\partial p$ and $\dot p = -\partial H/\partial q$ from the *same* circuit makes
+One consequence is load-bearing and easy to miss. Taking $\dot q = +\partial H/\partial p$ and $\dot p = -\partial H/\partial q$
+from the *same* circuit makes
 the energy rate vanish identically:
 
-$$
-\frac{dH}{dt}
-= \frac{\partial H}{\partial q}\dot q + \frac{\partial H}{\partial p}\dot p
-= \frac{\partial H}{\partial q}\frac{\partial H}{\partial p}
-- \frac{\partial H}{\partial p}\frac{\partial H}{\partial q} = 0
-$$
+$$\frac{dH}{dt} = \frac{\partial H}{\partial q}\dot q + \frac{\partial H}{\partial p}\dot p = \frac{\partial H}{\partial q}\frac{\partial H}{\partial p} - \frac{\partial H}{\partial p}\frac{\partial H}{\partial q} = 0$$
 
 Conservation is therefore structural, not trained — it holds at random parameter
 values, and the test suite checks it to $10^{-11}$ on an untrained circuit. It is
@@ -72,10 +59,7 @@ conditioned on the outcome. Tracing out the measured ancilla leaves a
 completely-positive trace-preserving map on the system — a discrete-time Lindblad
 channel:
 
-$$
-\rho \;\longmapsto\; \sum_k K_k \rho K_k^{\dagger},
-\qquad \sum_k K_k^{\dagger}K_k = I
-$$
+$$\rho \longmapsto \sum_k K_k \rho K_k^{\dagger}, \qquad \sum_k K_k^{\dagger}K_k = I$$
 
 So the $R$ channel is a physical irreversibility, not a non-unitary term inserted
 into a Hamiltonian and not a damping coefficient multiplied onto a velocity. The
@@ -221,8 +205,8 @@ network models, training and metrics, the experiments, and next steps.
 
 ## Citing
 
-Please cite the manuscript and the archived software release. A DOI will be
-minted with the first tagged release; the badge above is a placeholder.
+Please cite the manuscript and the archived software release
+([`10.5281/zenodo.21894846`](https://doi.org/10.5281/zenodo.21894846)).
 
 ## Licence
 

@@ -37,15 +37,21 @@ def test_minl_energy_decreases_monotonically():
     params = np.array([-0.048, 0.624, 0.474])       # [θ_J, θ_R, θ_kick]
 
     fracs = []
-    for _ in range(12):
+    for _ in range(60):
         sx, sy = model.run_trajectory(params, 1.0)
         fracs.append(compute_energy_monotone_fraction(_phase_space_energy(sx, sy)))
 
     # Individual trajectories are stochastic: a measurement outcome can transiently
-    # raise the energy, so a single run may dip below 1.0. The channel is passive
-    # in the mean, which is what the manuscript's f_mono metric reports.
-    assert np.mean(fracs) >= 0.9, f"mean monotone fraction {np.mean(fracs):.3f} — {np.round(fracs, 2)}"
-    assert min(fracs) >= 0.5, f"a trajectory was mostly non-monotone: {np.round(fracs, 2)}"
+    # raise the energy, so a single run may dip below 1.0. Measured over 200
+    # trajectories, 93% are perfectly monotone and the mean fraction is 0.971.
+    # The threshold and sample size are set from that distribution — a 12-sample
+    # mean falls below 0.9 about 3% of the time, which would make this test flaky.
+    assert np.mean(fracs) >= 0.90, (
+        f"mean monotone fraction {np.mean(fracs):.3f} over {len(fracs)} trajectories"
+    )
+    assert np.mean(np.array(fracs) == 1.0) >= 0.75, (
+        f"only {np.mean(np.array(fracs) == 1.0):.0%} of trajectories fully monotone"
+    )
 
 
 def test_run_trajectory_ignores_its_rng_argument():
@@ -78,29 +84,39 @@ def test_run_trajectory_ignores_its_rng_argument():
 
 
 def test_dissipation_scales_with_the_system_bath_coupling():
-    """Dose-response on θ_R: stronger coupling removes more energy.
+    """Dose-response on θ_R: stronger coupling removes more energy, in the mean.
 
-    θ_R sets the CRY rotation that entangles the system with its bath ancilla,
-    so it controls how much of the state is exposed to the measurement. This is
-    the knob that carries the dissipation, and its response is monotone.
+    θ_R sets the CRY rotation that entangles the system with its bath ancilla, so
+    it controls how much of the state is exposed to the measurement. This is the
+    knob that carries the dissipation.
+
+    Averaged, because the channel is genuinely stochastic at strong coupling: at
+    θ_R = 1.2 individual trajectories range over [-0.33, 1.00] and about 3% show
+    a net energy *gain*, which is the Born rule doing its job rather than a bug.
+    Weak coupling is effectively deterministic (zero spread at θ_R <= 0.3). A
+    single-trajectory comparison here would be flaky by construction.
     """
     model = DynamicQpHNN(n_steps=6, seed=7)
     base = np.array([-0.048, 0.624, 0.474])          # [θ_J, θ_R, θ_kick]
+    n_rep = 40
 
-    decays = []
+    means = []
     for theta_R in (0.0, 0.3, 0.624, 1.2):
         params = base.copy()
         params[1] = theta_R
-        sx, sy = model.run_trajectory(params, 1.0)
-        H = _phase_space_energy(sx, sy)
-        decays.append((H[0] - H[-1]) / abs(H[0]))
+        decays = []
+        for _ in range(n_rep):
+            sx, sy = model.run_trajectory(params, 1.0)
+            H = _phase_space_energy(sx, sy)
+            decays.append((H[0] - H[-1]) / abs(H[0]))
+        means.append(float(np.mean(decays)))
 
-    assert decays[0] == pytest.approx(0.0, abs=1e-9), (
+    assert means[0] == pytest.approx(0.0, abs=1e-9), (
         f"θ_R=0 leaves the ancilla uncoupled, so energy must be conserved; "
-        f"got decay {decays[0]:.4f}"
+        f"got mean decay {means[0]:.4f}"
     )
-    assert all(b > a for a, b in zip(decays, decays[1:])), (
-        f"decay not monotone in θ_R: {np.round(decays, 4)}"
+    assert all(b > a for a, b in zip(means, means[1:])), (
+        f"mean decay not monotone in θ_R: {np.round(means, 4)}"
     )
 
 
