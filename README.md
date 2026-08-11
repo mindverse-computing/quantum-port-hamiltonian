@@ -4,7 +4,7 @@
 
 **Conservation carried by a unitary, dissipation carried by a measurement.**
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.0000000.svg)](https://doi.org/10.5281/zenodo.0000000)
+[![DOI](https://zenodo.org/badge/DOI/0.5281/zenodo.21894846.svg)](https://doi.org/0.5281/zenodo.21894846)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10%20|%203.11%20|%203.12-blue.svg)](https://www.python.org/downloads/)
 [![Framework: Qiskit](https://img.shields.io/badge/Framework-Qiskit-6929c4.svg)](https://www.ibm.com/quantum/qiskit)
