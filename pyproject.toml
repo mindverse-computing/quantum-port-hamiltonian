@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qphnn"
+version = "1.0.0"
+description = "Quantum Port Hamiltonian — conservative and dissipative dynamics via measurement-induced nonlinearity"
+readme = "README.md"
+license-files = ["LICENSE", "NOTICE"]
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Dibakar Sigdel" }]
+keywords = [
+  "quantum-machine-learning",
+  "port-Hamiltonian",
+  "Hamiltonian neural networks",
+  "measurement-induced nonlinearity",
+  "qiskit",
+]
+
+dependencies = [
+  "qiskit>=1.0.0",
+  "scipy>=1.11.0",
+  "numpy>=1.24.0",
+  "matplotlib>=3.7.0",
+]
+
+[project.optional-dependencies]
+# Real-device execution. Needs an IBM Quantum API token in a git-ignored .env
+# (see .env.example); python-dotenv loads it.
+ibm = ["qiskit-ibm-runtime>=0.20", "python-dotenv>=1.0"]
+dev = ["pytest>=7.0"]
+
+[tool.setuptools]
+# The core library. Experiments are scripts, not importable package code.
+packages = ["common", "non_dissipative", "dissipative", "network", "ibm"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

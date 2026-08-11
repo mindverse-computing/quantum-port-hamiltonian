@@ -1,0 +1,22 @@
+# hnn-quantum dependencies
+# Install with: pip install -r requirements.txt
+
+# Core quantum framework (Qiskit 2.x Statevector API)
+qiskit>=1.0.0
+
+# Optimisation
+scipy>=1.11.0
+
+# Numerics & plotting
+numpy>=1.24.0
+matplotlib>=3.7.0
+
+# Note: qiskit-aer is NOT required.
+# DynamicQpHNN (v1) uses Qiskit Statevector.measure() for Born-rule MINL,
+# not AerSimulator. VectorFieldQpHNN (v2) uses StatevectorEstimator.
+
+# ── IBM Quantum hardware path (ibm/ subpackage) ───────────────────────────────
+# Real-device execution of the network model at large N. Needs an IBM Quantum
+# API token in a git-ignored .env (see .env.example); python-dotenv loads it.
+qiskit-ibm-runtime>=0.20
+python-dotenv>=1.0

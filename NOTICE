@@ -1,0 +1,15 @@
+Quantum Port Hamiltonian
+Copyright 2025-2026 Mindverse Computing LLC
+
+This product includes software developed by Mindverse Computing LLC.
+https://github.com/mindverse-computing
+
+Licensed under the Apache License, Version 2.0. See LICENSE for the terms.
+
+Not covered by this notice:
+
+  * Manuscript sources and figures under ../manuscript/ are not licensed for
+    redistribution here.
+  * Hardware execution records under experiments/ibm_hardware/results/ describe
+    runs on IBM Quantum devices. IBM Quantum is a service of IBM Corporation;
+    device names are used descriptively and imply no endorsement.

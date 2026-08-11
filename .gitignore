@@ -2,6 +2,10 @@
 __pycache__/
 *.py[codz]
 *$py.class
+.DS_Store
+.env
+.venv*
+reproduce/
 
 # C extensions
 *.so
@@ -216,3 +220,60 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- qphnn project-specific ---------------------------------------------------
+# Credentials. The IBM Quantum token and instance CRN live in a .env that is
+# never committed; .env.example is the tracked template. The `.env` rule above
+# is unanchored, so it matches at any depth (codes/.env, codes/ibm/.env, ...).
+# Listed again here because a credential leak is the one mistake this file
+# exists to prevent.
+.env
+.env.local
+
+# Experiment receipts ARE tracked. experiments/<name>/results/*.json and the
+# figures beside them are what the manuscript quotes and what check_numbers.py
+# verifies against; a blanket `results/` or `figures/` rule would hide exactly
+# the evidence the paper rests on. Only scratch output is excluded.
+experiments/*/results/*.tmp
+experiments/*/results/*.partial
+
+# Heavy binaries — the repository carries code, small figures and JSON records.
+# No dataset or trained model is redistributed here.
+*.h5
+*.hdf5
+*.npy
+*.npz
+*.pkl
+*.ckpt
+*.pt
+*.pth
+*.tar
+*.tar.gz
+*.zip
+
+# LaTeX build products. The manuscript lives outside this directory, but
+# check_numbers.py and the figure generator are run from here and a stray
+# compile leaves auxiliaries behind. Kept as one auditable block.
+*.aux
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.bcf
+*.run.xml
+
+# macOS. .DS_Store is written by Finder into every directory it displays, and
+# ._* are AppleDouble resource forks created when copying to non-HFS volumes.
+# Both were present in this tree before it was prepared for publication.
+.DS_Store
+._*
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
